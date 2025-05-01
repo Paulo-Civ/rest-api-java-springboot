@@ -1,9 +1,8 @@
-package com.pauloCiv;
+package com.pauloCiv.services;
 
 import com.pauloCiv.model.Person;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicLong;

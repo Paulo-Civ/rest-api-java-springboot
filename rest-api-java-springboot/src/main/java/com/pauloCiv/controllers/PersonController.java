@@ -1,6 +1,6 @@
 package com.pauloCiv.controllers;
 
-import com.pauloCiv.PersonServices;
+import com.pauloCiv.services.PersonServices;
 import com.pauloCiv.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
