@@ -10,4 +10,4 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: false
-    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false

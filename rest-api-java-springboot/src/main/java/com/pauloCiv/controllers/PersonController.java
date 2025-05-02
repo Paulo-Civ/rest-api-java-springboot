@@ -4,6 +4,7 @@ import com.pauloCiv.services.PersonServices;
 import com.pauloCiv.model.Person;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,8 +16,7 @@ public class PersonController {
     @Autowired
     private PersonServices service;
 
-    @RequestMapping(value = "/{id}",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/{id}",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public Person findById(@PathVariable("id") Long id){
@@ -24,9 +24,7 @@ public class PersonController {
     }
 
 
-
-    @RequestMapping(value = "/all",
-        method = RequestMethod.GET,
+    @GetMapping(value = "/all",
         produces = MediaType.APPLICATION_JSON_VALUE
     )
     public List<Person> findAll(){
@@ -34,8 +32,7 @@ public class PersonController {
     }
 
 
-    @RequestMapping(
-            method = RequestMethod.POST,
+    @PostMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -44,8 +41,7 @@ public class PersonController {
     }
 
 
-    @RequestMapping(
-            method = RequestMethod.PUT,
+    @PutMapping(
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
@@ -54,11 +50,11 @@ public class PersonController {
     }
 
 
-    @RequestMapping(value = "/{id}",
-            method = RequestMethod.DELETE
-    )
-    public void delete(@PathVariable("id") Long id){
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> delete(@PathVariable("id") Long id){
         service.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 
 }
