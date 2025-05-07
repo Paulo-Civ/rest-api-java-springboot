@@ -1,6 +1,7 @@
 package com.pauloCiv.controllers;
 
-import com.pauloCiv.data.dto.PersonDTO;
+import com.pauloCiv.data.dto.v1.PersonDTO;
+import com.pauloCiv.data.dto.v2.PersonDTOV2;
 import com.pauloCiv.services.PersonServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -38,6 +39,15 @@ public class PersonController {
     )
     public PersonDTO create(@RequestBody PersonDTO person){
         return service.create(person);
+    }
+
+    @PostMapping(
+            value = "/v2",
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE
+    )
+    public PersonDTOV2 create(@RequestBody PersonDTOV2 person){
+        return service.createV2(person);
     }
 
 

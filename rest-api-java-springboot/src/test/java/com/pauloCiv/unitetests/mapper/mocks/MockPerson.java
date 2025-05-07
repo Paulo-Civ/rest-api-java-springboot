@@ -3,7 +3,7 @@ package com.pauloCiv.unitetests.mapper.mocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pauloCiv.data.dto.PersonDTO;
+import com.pauloCiv.data.dto.v1.PersonDTO;
 import com.pauloCiv.model.Person;
 
 public class MockPerson {

@@ -1,9 +1,12 @@
 package com.pauloCiv.services;
 
-import com.pauloCiv.data.dto.PersonDTO;
+import com.pauloCiv.data.dto.v1.PersonDTO;
+import com.pauloCiv.data.dto.v2.PersonDTOV2;
 import com.pauloCiv.exception.ResourceNotFoundException;
 import static com.pauloCiv.mapper.ObjectMapper.parseListObjects;
 import static com.pauloCiv.mapper.ObjectMapper.parseObject;
+
+import com.pauloCiv.mapper.custom.PersonMapper;
 import com.pauloCiv.model.Person;
 import com.pauloCiv.repository.PersonRepository;
 import org.slf4j.Logger;
@@ -22,6 +25,9 @@ public class PersonServices {
 
     @Autowired
     PersonRepository repository;
+
+    @Autowired
+    PersonMapper converter;
 
     public List<PersonDTO> findAll(){
         logger.info("Finding all People");
@@ -44,6 +50,14 @@ public class PersonServices {
         var entity = parseObject(person, Person.class);
 
         return parseObject(repository.save(entity), PersonDTO.class);
+    }
+
+    public PersonDTOV2 createV2(PersonDTOV2 person){
+        logger.info("Creating one Person!");
+
+        var entity = converter.convertDTOtoEntity(person);
+
+        return converter.convertEntityToDTO(repository.save(entity));
     }
 
     public PersonDTO update(PersonDTO person){
