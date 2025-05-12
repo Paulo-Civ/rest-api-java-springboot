@@ -2,6 +2,7 @@ package com.pauloCiv.services;
 
 import com.pauloCiv.controllers.PersonController;
 import com.pauloCiv.data.dto.PersonDTO;
+import com.pauloCiv.exception.RequiredObjectIsNullException;
 import com.pauloCiv.exception.ResourceNotFoundException;
 import static com.pauloCiv.mapper.ObjectMapper.parseListObjects;
 import static com.pauloCiv.mapper.ObjectMapper.parseObject;
@@ -16,12 +17,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicLong;
 
 @Service
 public class PersonServices {
 
-    private final AtomicLong counter = new AtomicLong();
     private Logger logger = LoggerFactory.getLogger(PersonServices.class.getName());
 
     @Autowired
@@ -49,6 +48,7 @@ public class PersonServices {
     }
 
     public PersonDTO create(PersonDTO person){
+        if (person == null) throw new RequiredObjectIsNullException();
         logger.info("Creating one Person!");
 
         var entity = parseObject(person, Person.class);
@@ -60,6 +60,7 @@ public class PersonServices {
     }
 
     public PersonDTO update(PersonDTO person){
+        if (person == null) throw new RequiredObjectIsNullException();
         logger.info("Updating one Person!");
 
         Person entity = repository.findById(person.getId()).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
