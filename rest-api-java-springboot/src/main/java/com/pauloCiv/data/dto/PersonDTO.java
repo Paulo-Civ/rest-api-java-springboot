@@ -1,6 +1,5 @@
 package com.pauloCiv.data.dto;
 
-import org.hibernate.boot.jaxb.hbm.internal.RepresentationModeConverter;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;

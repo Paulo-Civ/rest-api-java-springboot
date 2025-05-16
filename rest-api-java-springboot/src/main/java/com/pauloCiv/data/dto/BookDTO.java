@@ -1,35 +1,21 @@
-package com.pauloCiv.model;
+package com.pauloCiv.data.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.persistence.*;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Objects;
 
-@Entity
-@Table(name = "books")
-public class Book implements Serializable {
+public class BookDTO extends RepresentationModel<BookDTO> implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(name = "author")
     private String author;
-
-    @Column(name = "launch_date", nullable = false)
     private LocalDateTime launchDate;
-
-    @Column(name = "price", nullable = false)
     private Double price;
-
-    @Column(name = "title")
     private String title;
 
-    public Book() {}
+    public BookDTO() {}
 
     public String getAuthor() {
         return author;
@@ -74,7 +60,7 @@ public class Book implements Serializable {
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
-        Book book = (Book) o;
+        BookDTO book = (BookDTO) o;
         return Objects.equals(getId(), book.getId()) && Objects.equals(getAuthor(), book.getAuthor()) && Objects.equals(getLaunchDate(), book.getLaunchDate()) && Objects.equals(getPrice(), book.getPrice()) && Objects.equals(getTitle(), book.getTitle());
     }
 
