@@ -3,7 +3,7 @@ package com.pauloCiv.data.dto;
 import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
 
 public class BookDTO extends RepresentationModel<BookDTO> implements Serializable {
@@ -11,7 +11,7 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
 
     private Long id;
     private String author;
-    private LocalDateTime launchDate;
+    private Date launchDate;
     private Double price;
     private String title;
 
@@ -33,11 +33,11 @@ public class BookDTO extends RepresentationModel<BookDTO> implements Serializabl
         this.id = id;
     }
 
-    public LocalDateTime getLaunchDate() {
+    public Date getLaunchDate() {
         return launchDate;
     }
 
-    public void setLaunchDate(LocalDateTime launchDate) {
+    public void setLaunchDate(Date launchDate) {
         this.launchDate = launchDate;
     }
 

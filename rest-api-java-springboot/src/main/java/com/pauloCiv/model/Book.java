@@ -1,10 +1,8 @@
 package com.pauloCiv.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Objects;
 
@@ -17,16 +15,17 @@ public class Book implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "author")
+    @Column(name = "author", nullable = false, length = 180)
     private String author;
 
     @Column(name = "launch_date", nullable = false)
-    private LocalDateTime launchDate;
+    @Temporal(TemporalType.DATE)
+    private Date launchDate;
 
     @Column(name = "price", nullable = false)
     private Double price;
 
-    @Column(name = "title")
+    @Column(name = "title", nullable = false, length = 250)
     private String title;
 
     public Book() {}
@@ -47,11 +46,11 @@ public class Book implements Serializable {
         this.id = id;
     }
 
-    public LocalDateTime getLaunchDate() {
+    public Date getLaunchDate() {
         return launchDate;
     }
 
-    public void setLaunchDate(LocalDateTime launchDate) {
+    public void setLaunchDate(Date launchDate) {
         this.launchDate = launchDate;
     }
 

@@ -1,9 +1,7 @@
 package com.pauloCiv.services;
 
 import com.pauloCiv.controllers.BookController;
-import com.pauloCiv.controllers.PersonController;
 import com.pauloCiv.data.dto.BookDTO;
-import com.pauloCiv.data.dto.PersonDTO;
 import com.pauloCiv.exception.RequiredObjectIsNullException;
 import com.pauloCiv.exception.ResourceNotFoundException;
 import static com.pauloCiv.mapper.ObjectMapper.parseListObjects;
@@ -18,8 +16,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
