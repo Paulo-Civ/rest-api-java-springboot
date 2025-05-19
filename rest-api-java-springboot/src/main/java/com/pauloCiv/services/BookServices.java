@@ -1,10 +1,16 @@
 package com.pauloCiv.services;
 
+import com.pauloCiv.controllers.BookController;
+import com.pauloCiv.controllers.PersonController;
 import com.pauloCiv.data.dto.BookDTO;
+import com.pauloCiv.data.dto.PersonDTO;
 import com.pauloCiv.exception.RequiredObjectIsNullException;
 import com.pauloCiv.exception.ResourceNotFoundException;
 import static com.pauloCiv.mapper.ObjectMapper.parseListObjects;
 import static com.pauloCiv.mapper.ObjectMapper.parseObject;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import com.pauloCiv.model.Book;
 import com.pauloCiv.repository.BookRepository;
 import org.slf4j.Logger;
@@ -28,6 +34,7 @@ public class BookServices {
         logger.info("Finding all books");
 
         List<BookDTO> books = parseListObjects(repository.findAll(), BookDTO.class);
+        books.forEach(this::addHateoasLinks);
 
         return books;
     }
@@ -38,7 +45,10 @@ public class BookServices {
         Book entity = repository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
-        return parseObject(entity, BookDTO.class);
+        var dto = parseObject(entity, BookDTO.class);
+        addHateoasLinks(dto);
+
+        return dto;
     }
 
     public BookDTO create(BookDTO book) {
@@ -47,7 +57,10 @@ public class BookServices {
 
         Book entity = parseObject(book, Book.class);
 
-        return parseObject(repository.save(entity), BookDTO.class);
+        var dto = parseObject(repository.save(entity), BookDTO.class);
+        addHateoasLinks(dto);
+
+        return dto;
     }
 
     public BookDTO update(BookDTO book) {
@@ -60,7 +73,10 @@ public class BookServices {
         entity.setPrice(book.getPrice());
         entity.setTitle(book.getTitle());
 
-        return parseObject(repository.save(entity), BookDTO.class);
+        var dto = parseObject(repository.save(entity), BookDTO.class);
+        addHateoasLinks(dto);
+
+        return dto;
     }
 
     public void delete(Long id) {
@@ -69,5 +85,13 @@ public class BookServices {
         Book entity = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException("No records found for this ID!"));
 
         repository.delete(entity);
+    }
+
+    private void addHateoasLinks(BookDTO dto) {
+        dto.add(linkTo(methodOn(BookController.class).findById(dto.getId())).withSelfRel().withType("GET"));
+        dto.add(linkTo(methodOn(BookController.class).findAll()).withRel("findAll").withType("GET"));
+        dto.add(linkTo(methodOn(BookController.class).create(dto)).withRel("create").withType("POST"));
+        dto.add(linkTo(methodOn(BookController.class).update(dto)).withRel("update").withType("PUT"));
+        dto.add(linkTo(methodOn(BookController.class).delete(dto.getId())).withRel("delete").withType("DELETE"));
     }
 }
