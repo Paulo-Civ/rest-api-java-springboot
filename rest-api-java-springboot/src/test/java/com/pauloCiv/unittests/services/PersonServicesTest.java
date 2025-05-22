@@ -1,10 +1,10 @@
-package com.pauloCiv.services;
+package com.pauloCiv.unittests.services;
 
 import com.pauloCiv.data.dto.PersonDTO;
 import com.pauloCiv.exception.RequiredObjectIsNullException;
 import com.pauloCiv.model.Person;
 import com.pauloCiv.repository.PersonRepository;
-import com.pauloCiv.unitetests.mapper.mocks.MockPerson;
+import com.pauloCiv.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;

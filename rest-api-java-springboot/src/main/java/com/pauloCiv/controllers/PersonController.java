@@ -2,7 +2,7 @@ package com.pauloCiv.controllers;
 
 import com.pauloCiv.controllers.docs.PersonControllerDocs;
 import com.pauloCiv.data.dto.PersonDTO;
-import com.pauloCiv.services.PersonServices;
+import com.pauloCiv.unittests.services.PersonServices;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

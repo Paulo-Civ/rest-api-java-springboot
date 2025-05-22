@@ -1,4 +1,4 @@
-package com.pauloCiv.unitetests.mapper.mocks;
+package com.pauloCiv.unittests.mapper.mocks;
 
 import java.util.ArrayList;
 import java.util.List;

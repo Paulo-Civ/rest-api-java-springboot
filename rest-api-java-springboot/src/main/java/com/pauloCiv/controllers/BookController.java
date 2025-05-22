@@ -2,7 +2,7 @@ package com.pauloCiv.controllers;
 
 import com.pauloCiv.controllers.docs.BookControllerDocs;
 import com.pauloCiv.data.dto.BookDTO;
-import com.pauloCiv.services.BookServices;
+import com.pauloCiv.unittests.services.BookServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;

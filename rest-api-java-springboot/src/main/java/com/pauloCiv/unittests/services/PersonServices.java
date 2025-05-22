@@ -1,4 +1,4 @@
-package com.pauloCiv.services;
+package com.pauloCiv.unittests.services;
 
 import com.pauloCiv.controllers.PersonController;
 import com.pauloCiv.data.dto.PersonDTO;
