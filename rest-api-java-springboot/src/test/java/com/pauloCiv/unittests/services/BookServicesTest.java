@@ -4,6 +4,7 @@ import com.pauloCiv.data.dto.BookDTO;
 import com.pauloCiv.exception.RequiredObjectIsNullException;
 import com.pauloCiv.model.Book;
 import com.pauloCiv.repository.BookRepository;
+import com.pauloCiv.services.BookServices;
 import com.pauloCiv.unittests.mapper.mocks.MockBook;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

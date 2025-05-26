@@ -4,6 +4,7 @@ import com.pauloCiv.data.dto.PersonDTO;
 import com.pauloCiv.exception.RequiredObjectIsNullException;
 import com.pauloCiv.model.Person;
 import com.pauloCiv.repository.PersonRepository;
+import com.pauloCiv.services.PersonServices;
 import com.pauloCiv.unittests.mapper.mocks.MockPerson;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

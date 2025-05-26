@@ -33,6 +33,7 @@ public class AbstractIntegrationTest {
         @Override
         public void initialize(ConfigurableApplicationContext applicationContext) {
             startContainers();
+
             ConfigurableEnvironment environment = applicationContext.getEnvironment();
             MapPropertySource testcontainers = new MapPropertySource("testcontainers",
                     (Map) createConnectionConfiguration());
