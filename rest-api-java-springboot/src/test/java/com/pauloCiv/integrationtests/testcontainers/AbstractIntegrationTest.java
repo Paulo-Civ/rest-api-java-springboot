@@ -1,33 +1,41 @@
 package com.pauloCiv.integrationtests.testcontainers;
 
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MapPropertySource;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.ContextConfiguration;
-import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.lifecycle.Startables;
 
 import java.util.Map;
 import java.util.stream.Stream;
 
+@ActiveProfiles("test")
+@SpringBootTest
 @ContextConfiguration(initializers = AbstractIntegrationTest.Initializer.class)
 public class AbstractIntegrationTest {
 
     static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
 
-        static MySQLContainer<?> mysql = new MySQLContainer<>("mysql:9.1.0");
-
+        static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
         private static void startContainers() {
-            Startables.deepStart(Stream.of(mysql)).join();
+            Startables.deepStart(Stream.of(postgres)).join();
         }
 
         private static Map<String, String> createConnectionConfiguration() {
             return Map.of(
-                    "spring.datasource.url", mysql.getJdbcUrl(),
-                    "spring.datasource.username", mysql.getUsername(),
-                    "spring.datasource.password", mysql.getPassword()
+                    "spring.datasource.url", postgres.getJdbcUrl(),
+                    "spring.datasource.username", postgres.getUsername(),
+                    "spring.datasource.password", postgres.getPassword(),
+                    "spring.datasource.driver-class-name", "org.postgresql.Driver",
+                    "spring.jpa.database-platform", "org.hibernate.dialect.PostgreSQLDialect",
+                    "spring.flyway.url", postgres.getJdbcUrl(),
+                    "spring.flyway.user", postgres.getUsername(),
+                    "spring.flyway.password", postgres.getPassword()
             );
         }
 
