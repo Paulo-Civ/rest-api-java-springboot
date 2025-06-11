@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerTest  extends AbstractIntegrationTest {
+class PersonControllerCorsTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
     private static ObjectMapper objectMapper;
@@ -67,13 +67,13 @@ class PersonControllerTest  extends AbstractIntegrationTest {
         assertNotNull(createdPerson.getLastName());
         assertNotNull(createdPerson.getAddress());
         assertNotNull(createdPerson.getGender());
-
         assertTrue(createdPerson.getId() > 0);
 
         assertEquals("Richard", createdPerson.getFirstName());
         assertEquals("Stallman", createdPerson.getLastName());
         assertEquals("New York - New York - USA", createdPerson.getAddress());
         assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
     }
 
     @Test
@@ -139,6 +139,7 @@ class PersonControllerTest  extends AbstractIntegrationTest {
         assertEquals("Stallman", createdPerson.getLastName());
         assertEquals("New York - New York - USA", createdPerson.getAddress());
         assertEquals("Male", createdPerson.getGender());
+        assertTrue(createdPerson.getEnabled());
     }
 
     @Test
@@ -171,5 +172,6 @@ class PersonControllerTest  extends AbstractIntegrationTest {
         person.setLastName("Stallman");
         person.setAddress("New York - New York - USA");
         person.setGender("Male");
+        person.setEnabled(true);
     }
 }
