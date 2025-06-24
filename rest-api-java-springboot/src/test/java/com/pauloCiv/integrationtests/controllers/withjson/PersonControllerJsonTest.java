@@ -1,6 +1,7 @@
 package com.pauloCiv.integrationtests.controllers.withjson;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.pauloCiv.config.TestConfigs;
@@ -14,6 +15,8 @@ import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.junit.Assert.*;
@@ -172,6 +175,46 @@ class PersonControllerJsonTest extends AbstractIntegrationTest {
                     .delete("{id}")
                 .then()
                     .statusCode(204);
+    }
+
+    @Test
+    @Order(6)
+    void findAllTest() throws JsonProcessingException {
+
+        var content = given(specification)
+                .accept(MediaType.APPLICATION_JSON_VALUE)
+                .when()
+                .get("/all")
+                .then()
+                .statusCode(200)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .extract()
+                .body()
+                .asString();
+
+        List<PersonDTO> people = objectMapper.readValue(content, new TypeReference<List<PersonDTO>>() {});
+
+        PersonDTO personOne = people.get(0);
+
+        assertNotNull(personOne.getId());
+        assertTrue(personOne.getId() > 0);
+
+        assertEquals("Ayrton", personOne.getFirstName());
+        assertEquals("Senna", personOne.getLastName());
+        assertEquals("São Paulo - Brasil", personOne.getAddress());
+        assertEquals("Male", personOne.getGender());
+        assertTrue(personOne.getEnabled());
+
+        PersonDTO personFour = people.get(4);
+
+        assertNotNull(personFour.getId());
+        assertTrue(personFour.getId() > 0);
+
+        assertEquals("Muhamamd", personFour.getFirstName());
+        assertEquals("Ali", personFour.getLastName());
+        assertEquals("Kentucky - US", personFour.getAddress());
+        assertEquals("Male", personFour.getGender());
+        assertTrue(personFour.getEnabled());
     }
 
     private void mockPerson() {
