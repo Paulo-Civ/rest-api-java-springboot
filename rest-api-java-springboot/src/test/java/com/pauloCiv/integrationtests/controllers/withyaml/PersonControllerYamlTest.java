@@ -1,9 +1,10 @@
-package com.pauloCiv.integrationtests.controllers.withxml;
+package com.pauloCiv.integrationtests.controllers.withyaml;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.pauloCiv.config.TestConfigs;
 import com.pauloCiv.integrationtests.dto.PersonDTO;
 import com.pauloCiv.integrationtests.testcontainers.AbstractIntegrationTest;
@@ -11,6 +12,7 @@ import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
+import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,21 +20,23 @@ import org.springframework.http.MediaType;
 
 import java.util.List;
 
+import static io.restassured.RestAssured.config;
 import static io.restassured.RestAssured.given;
+import static io.restassured.config.EncoderConfig.encoderConfig;
 import static org.junit.Assert.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class PersonControllerXmlTest extends AbstractIntegrationTest {
+class PersonControllerYamlTest extends AbstractIntegrationTest {
 
     private static RequestSpecification specification;
-    private static XmlMapper objectMapper;
+    private static ObjectMapper objectMapper;
 
     private static PersonDTO person;
 
     @BeforeAll
     static void setUp() {
-        objectMapper = new XmlMapper();
+        objectMapper = new ObjectMapper(new YAMLFactory());
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
 
         person = new PersonDTO();
@@ -43,23 +47,28 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     void createTest() throws JsonProcessingException {
         mockPerson();
 
+        String yamlBody = objectMapper.writeValueAsString(person);
+
         specification = new RequestSpecBuilder()
-            .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
-            .setBasePath("/api/person/v1")
-            .setPort(TestConfigs.SERVER_PORT)
+                .addHeader(TestConfigs.HEADER_PARAM_ORIGIN, TestConfigs.ORIGIN_ERUDIO)
+                .setBasePath("/api/person/v1")
+                .setPort(TestConfigs.SERVER_PORT)
                 .addFilter(new RequestLoggingFilter(LogDetail.ALL))
                 .addFilter(new ResponseLoggingFilter(LogDetail.ALL))
-            .build();
+                .setConfig(config().encoderConfig(
+                        encoderConfig().encodeContentTypeAs(MediaType.APPLICATION_YAML_VALUE, ContentType.TEXT)
+                ))
+                .build();
 
         var content = given(specification)
-            .contentType(MediaType.APPLICATION_XML_VALUE)
-                .accept(MediaType.APPLICATION_XML_VALUE)
-                .body(person)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+            .accept(MediaType.APPLICATION_YAML_VALUE)
+                .body(yamlBody)
             .when()
                 .post()
             .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
             .extract()
                 .body()
                     .asString();
@@ -83,15 +92,17 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
 
         person.setLastName("Benedict Torvalds");
 
+        String yamlBody = objectMapper.writeValueAsString(person);
+
         var content = given(specification)
-            .contentType(MediaType.APPLICATION_XML_VALUE)
-                .accept(MediaType.APPLICATION_XML_VALUE)
-                .body(person)
+            .contentType(MediaType.APPLICATION_YAML_VALUE)
+            .accept(MediaType.APPLICATION_YAML_VALUE)
+                .body(yamlBody)
             .when()
                 .put()
             .then()
                 .statusCode(200)
-                .contentType(MediaType.APPLICATION_XML_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
             .extract()
                 .body()
                     .asString();
@@ -114,14 +125,14 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     void findByIdTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_XML_VALUE)
-                    .accept(MediaType.APPLICATION_XML_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
                     .get("{id}")
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_XML_VALUE)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
                         .asString();
@@ -144,14 +155,14 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     void disableTest() throws JsonProcessingException {
 
         var content = given(specification)
-                .contentType(MediaType.APPLICATION_XML_VALUE)
-                    .accept(MediaType.APPLICATION_XML_VALUE)
+                .contentType(MediaType.APPLICATION_YAML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .pathParam("id", person.getId())
                 .when()
                     .patch("{id}")
                 .then()
                     .statusCode(200)
-                    .contentType(MediaType.APPLICATION_XML_VALUE)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
                     .body()
                         .asString();
@@ -185,16 +196,18 @@ class PersonControllerXmlTest extends AbstractIntegrationTest {
     @Order(6)
     void findAllTest() throws JsonProcessingException {
 
+        objectMapper.writeValueAsString(person);
+
         var content = given(specification)
-                .accept(MediaType.APPLICATION_XML_VALUE)
+                .accept(MediaType.APPLICATION_YAML_VALUE)
                 .when()
-                .get("/all")
+                    .get("/all")
                 .then()
-                .statusCode(200)
-                .contentType(MediaType.APPLICATION_XML_VALUE)
+                    .statusCode(200)
+                    .contentType(MediaType.APPLICATION_YAML_VALUE)
                 .extract()
-                .body()
-                .asString();
+                    .body()
+                        .asString();
 
         List<PersonDTO> people = objectMapper.readValue(content, new TypeReference<List<PersonDTO>>() {});
 
